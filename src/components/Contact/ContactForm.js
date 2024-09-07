@@ -20,6 +20,7 @@ function ContactForm() {
           action="https://public.herotofu.com/v1/7bf7df50-6d53-11ef-95a6-6f38c376f913" 
           method="post" 
           acceptCharset="UTF-8"
+          target="_blank"
         >
           <div className="mb-4">
             <label htmlFor="name" className="block text-sm font-medium text-gray-700">Your Name</label>
