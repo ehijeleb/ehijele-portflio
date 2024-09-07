@@ -20,7 +20,7 @@ function ContactForm() {
       .catch(() => {
         setError('An error occurred while sending your message. Please try again.');
       });
-    
+  };
 
   return (
     <div>
