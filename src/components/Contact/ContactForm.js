@@ -1,33 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 function ContactForm() {
-  const [submitted, setSubmitted] = useState(false);
-  const [error, setError] = useState(null);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const form = e.target;
-
-    fetch('https://public.herotofu.com/v1/7bf7df50-6d53-11ef-95a6-6f38c376f913', {
-      method: 'POST',
-      body: new FormData(form),
-      mode: 'no-cors',  // Prevent CORS issues
-    })
-      .then(() => {
-        // Display success message regardless of response outcome
-        setSubmitted(true);
-        form.reset();  // Optionally clear the form fields after submission
-        setError(null);  // Clear any previous error messages
-      })
-      .catch(() => {
-        // Display a success message even if there's an error, as per your request
-        setSubmitted(true);
-        form.reset();
-        setError(null);
-      });
-  };
-
   return (
     <div>
       <nav className="bg-stone-900 py-4 px-8 flex justify-between items-center">
@@ -43,9 +16,13 @@ function ContactForm() {
       <div className="contact-form max-w-md mt-16 mx-auto bg-card text-card-foreground p-6 rounded-lg shadow-lg">
         <h2 className="text-2xl font-bold mb-4">Contact Me</h2>
 
-        <form onSubmit={handleSubmit} acceptCharset="UTF-8">
+        <form 
+          action="https://public.herotofu.com/v1/7bf7df50-6d53-11ef-95a6-6f38c376f913" 
+          method="post" 
+          acceptCharset="UTF-8"
+        >
           <div className="mb-4">
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
+            <label htmlFor="name" className="block text-sm font-medium text-gray-700">Your Name</label>
             <input
               type="text"
               name="Name"
@@ -57,7 +34,7 @@ function ContactForm() {
           </div>
 
           <div className="mb-4">
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700">Your Email</label>
             <input
               type="email"
               name="Email"
@@ -104,13 +81,6 @@ function ContactForm() {
           </div>
         </form>
 
-        {submitted && !error && (
-          <p className="mt-4 text-black text-sm font-semibold">Thank you for your message! I will try to get back to you asap.</p>
-        )}
-
-        {error && (
-          <p className="mt-4 text-red-600">{error}</p>
-        )}
       </div>
     </div>
   );
