@@ -8,9 +8,18 @@ function ContactForm() {
     e.preventDefault();
 
     const form = e.target;
-    fetch('https://public.herotofu.com/v1/7bf7df50-6d53-11ef-95a6-6f38c376f913', {
+
+    fetch('/api/submit-form', {  // Call the serverless function
       method: 'POST',
-      body: new FormData(form),
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        Name: form.Name.value,
+        Email: form.Email.value,
+        Subject: form.Subject.value,
+        Message: form.Message.value,
+      }),
     })
       .then(response => {
         if (!response.ok) {
