@@ -1,13 +1,12 @@
-// /api/submit-form.js
 export default async function handler(req, res) {
     if (req.method === 'POST') {
       try {
         const response = await fetch('https://public.herotofu.com/v1/7bf7df50-6d53-11ef-95a6-6f38c376f913', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
           },
-          body: JSON.stringify(req.body)
+          body: JSON.stringify(req.body),
         });
   
         if (!response.ok) {
