@@ -2,23 +2,29 @@ import React, { useState } from 'react';
 
 function ContactForm() {
   const [submitted, setSubmitted] = useState(false);
-  const [error, setError] = useState(null); // To handle errors if needed
+  const [error, setError] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const form = e.target;
+
     fetch('https://public.herotofu.com/v1/7bf7df50-6d53-11ef-95a6-6f38c376f913', {
       method: 'POST',
       body: new FormData(form),
-      mode: 'no-cors',
+      mode: 'no-cors',  // Prevent CORS issues
     })
       .then(() => {
-        setSubmitted(true);  // Assume the message is sent
-        form.reset();        // Optionally clear the form
+        // Display success message regardless of response outcome
+        setSubmitted(true);
+        form.reset();  // Optionally clear the form fields after submission
+        setError(null);  // Clear any previous error messages
       })
       .catch(() => {
-        setError('An error occurred while sending your message. Please try again.');
+        // Display a success message even if there's an error, as per your request
+        setSubmitted(true);
+        form.reset();
+        setError(null);
       });
   };
 
