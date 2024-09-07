@@ -8,31 +8,19 @@ function ContactForm() {
     e.preventDefault();
 
     const form = e.target;
-
-    fetch('/api/submit-form', {  // Call the serverless function
+    fetch('https://public.herotofu.com/v1/7bf7df50-6d53-11ef-95a6-6f38c376f913', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        Name: form.Name.value,
-        Email: form.Email.value,
-        Subject: form.Subject.value,
-        Message: form.Message.value,
-      }),
+      body: new FormData(form),
+      mode: 'no-cors',
     })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Something went wrong');
-        }
-        setSubmitted(true);
-        setError(null);  // Clear any previous errors
-        form.reset();  // Optionally clear the form fields after submission
+      .then(() => {
+        setSubmitted(true);  // Assume the message is sent
+        form.reset();        // Optionally clear the form
       })
       .catch(() => {
         setError('An error occurred while sending your message. Please try again.');
       });
-  };
+    
 
   return (
     <div>
