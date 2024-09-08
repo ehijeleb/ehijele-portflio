@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button } from "@nextui-org/react";
+import { Modal, ModalContent, ModalHeader, ModalBody} from "@nextui-org/react";
 
 const ProjectDetailModal = ({ isOpen, onClose, project }) => {
   if (!project) return null; // Ensure the project exists before rendering
@@ -24,11 +24,7 @@ const ProjectDetailModal = ({ isOpen, onClose, project }) => {
           <p className="mb-4">{project.description}</p>
           <p><strong>Technology:</strong> {project.technology}</p>
         </ModalBody>
-        <ModalFooter className="flex justify-end">
-        <Button color="danger" variant="light" onPress={onClose} className="bg-gray-500 text-white py-2 px-4 rounded-md hover:bg-gray-600 transition-colors">
-                Cancel
-              </Button>
-        </ModalFooter>
+
       </ModalContent>
     </Modal>
   );
