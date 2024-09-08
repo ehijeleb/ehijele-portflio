@@ -9,11 +9,11 @@ const ProjectDetailModal = ({ isOpen, onClose, project }) => {
       isOpen={isOpen}
       onOpenChange={onClose}
       aria-labelledby="modal-title"
-      className=" bg-zinc-50 " 
+      className="flex  my-36  fixed inset-0 z-50 bg-zinc-50 " 
     >
-      <ModalContent className=" bg-neutral-50  text-black rounded-lg p-6 w-full  shadow-xl">
+      <ModalContent className=" bg-neutral-50  text-black rounded-lg p-6  overflow-auto w-full mx-auto shadow-xl">
         <ModalHeader>
-          <h2 id="modal-title" className="text-2xl mb-4 text-gray-800 text-center">{project.title}</h2>
+          <h2 id="modal-title" className="text-2xl text-center">{project.title}</h2>
         </ModalHeader>
         <ModalBody>
           <img
