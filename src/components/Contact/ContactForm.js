@@ -8,7 +8,6 @@ function ContactForm() {
         <ul className="flex space-x-4">
           <li><a href="/" className="text-white hover:text-gray-500">Home</a></li>
           <li><a href="/projects" className="text-white hover:text-gray-500">Projects</a></li>
-          <li><a href="/blog" className="text-white hover:text-gray-500">Blog</a></li>
           <li><a href="/contact" className="text-white hover:text-gray-500">Contact</a></li>
         </ul>
       </nav>
