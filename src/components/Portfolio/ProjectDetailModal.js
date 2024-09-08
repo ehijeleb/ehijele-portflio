@@ -9,11 +9,11 @@ const ProjectDetailModal = ({ isOpen, onClose, project }) => {
       isOpen={isOpen}
       onOpenChange={onClose}
       aria-labelledby="modal-title"
-      className="flex  my-36  fixed inset-0 z-50 bg-zinc-50 " 
+      className=" bg-zinc-50 " 
     >
-      <ModalContent className=" bg-neutral-50  text-black rounded-lg p-6  overflow-auto w-full mx-auto shadow-xl">
+      <ModalContent className=" bg-neutral-50  text-black rounded-lg p-6 w-full  shadow-xl">
         <ModalHeader>
-          <h2 id="modal-title" className="text-2xl text-center">{project.title}</h2>
+          <h2 id="modal-title" className="text-2xl mb-4 text-gray-800 text-center">{project.title}</h2>
         </ModalHeader>
         <ModalBody>
           <img
@@ -25,9 +25,9 @@ const ProjectDetailModal = ({ isOpen, onClose, project }) => {
           <p><strong>Technology:</strong> {project.technology}</p>
         </ModalBody>
         <ModalFooter className="flex justify-end">
-          <Button onPress={onClose} className="bg-red-500 text-white">
-            Close
-          </Button>
+        <Button color="danger" variant="light" onPress={onClose} className="bg-gray-500 text-white py-2 px-4 rounded-md hover:bg-gray-600 transition-colors">
+                Cancel
+              </Button>
         </ModalFooter>
       </ModalContent>
     </Modal>
