@@ -61,10 +61,10 @@ function Home() {
 
         {/* Typing Text div */}
         <div className="text-container text-right lg:mr-32 ">
-          <h1 className="text-lg lg:text-4xl font-bold mb-2">
+          <h1 className="text-md lg:text-4xl font-extrabold mb-2">
             <span ref={typedElement} />
           </h1>
-          <h2 className="text-md lg:text-xl text-gray-600">
+          <h2 className="text-sm lg:text-xl text-gray-600">
             An ambitious Software Engineer
           </h2>
 
