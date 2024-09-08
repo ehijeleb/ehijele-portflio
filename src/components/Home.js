@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { supabase } from './supabaseClient';  // Import your Supabase client
+import Typed from 'typed.js';
 
 function Home() {
   const [featuredProject, setFeaturedProject] = useState(null);
-  const [latestBlogPost, setLatestBlogPost] = useState(null);
+  const typedElement = useRef(null);  // Create a reference for the typed element
 
   useEffect(() => {
     // Fetch the featured project from Supabase
@@ -21,98 +22,72 @@ function Home() {
       }
     };
 
-    // Fetch the latest blog post from Supabase
-    const fetchLatestBlogPost = async () => {
-      const { data, error } = await supabase
-        .from('blog_post')  // Assuming the table name is 'blog_post'
-        .select('*')
-        .order('created_at', { ascending: false })  // Get the latest post
-        .limit(1)
-        .single();
-
-      if (error) {
-        console.error('Error fetching latest blog post:', error);
-      } else {
-        setLatestBlogPost(data);
-      }
-    };
-
     fetchFeaturedProject();
-    fetchLatestBlogPost();
+
+    // Initialize the Typed.js effect on the header
+    const typed = new Typed(typedElement.current, {
+      strings: ["Hello, I'm Benedict Ibhawaegbele"],
+      typeSpeed: 50,
+      showCursor: true,  
+    });
+
+    return () => {
+      // Destroy Typed instance during cleanup to stop animation
+      typed.destroy();
+    };
   }, []);
 
   return (
     <div className="home">
-
-      {/* Spinner CSS */}
-      <style jsx>{`
-        @keyframes spinner {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
-
-        .spinner {
-          margin: 0 auto;
-          width: 24px;
-          height: 24px;
-          border: 4px solid rgba(0, 0, 0, 0.1);
-          border-top: 4px solid #000;
-          border-radius: 50%;
-          animation: spinner 1s linear infinite;
-        }
-      `}</style>
-
       <nav className="bg-stone-900 py-4 px-8 flex justify-between items-center">
-        <div className="text-neutral-500 font-bold">Benedict Ibhawaegbele</div>
+        <div className="text-neutral-500 font-bold"></div>
         <ul className="flex space-x-4">
           <li><a href="/" className="text-white hover:text-gray-500">Home</a></li>
           <li><a href="/projects" className="text-white hover:text-gray-500">Projects</a></li>
-          <li><a href="/blog" className="text-white hover:text-gray-500">Blog</a></li>
           <li><a href="/contact" className="text-white hover:text-gray-500">Contact</a></li>
         </ul>
       </nav>
 
-      <header className="bg-neutral-50 text-primary py-32 px-8 text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to My Portfolio</h1>
-        <p className="text-lg">Explore my projects and read about my learning journey</p>
+      <header className="text-primary py-24 px-8 flex items-center justify-between">
+        {/* Static Image div */}
+        <div className="ml-56">
+          <img
+            src="https://ysyvmxkeecxnnfoarkad.supabase.co/storage/v1/object/sign/project-images/1718257818818.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJwcm9qZWN0LWltYWdlcy8xNzE4MjU3ODE4ODE4LmpwZyIsImlhdCI6MTcyNTgxNTk1MywiZXhwIjoxNzU3MzUxOTUzfQ._XxpPEF6fZRD2cPT4sl53oGa2PN7jvER3cdJRM1RYEI&t=2024-09-08T17%3A19%3A13.933Z"
+            alt="Profile"
+            className="w-48 h-48 rounded-full border border-black"
+          />
+        </div>
+
+        {/* Typing Text div */}
+        <div className="text-container text-right mr-32">
+          <h1 className="text-4xl font-bold mb-2">
+            <span ref={typedElement} />
+          </h1>
+          <h2 className="text-xl text-gray-600">
+            An ambitious Software Engineer
+          </h2>
+
+          <div className="flex justify-end space-x-4 mt-4">
+            <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" className="w-8 h-8"/>
+            </a>
+            <a href="https://www.github.com" target="_blank" rel="noopener noreferrer">
+              <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub" className="w-8 h-8"/>
+            </a>
+          </div>
+        </div>
       </header>
 
-      <section className="py-16 px-8 grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div className="bg-card p-4 rounded-lg shadow-lg">
-          <h2 className="text-2xl font-bold mb-4">Featured Project</h2>
-          {featuredProject ? (
-            <div>
-              <img
-                src={featuredProject.image}  // Supabase image URL stored in the database
-                alt={featuredProject.title}
-                className="w-full h-40 object-cover rounded-lg mb-4"
-              />
-              <h3 className="text-xl font-semibold">{featuredProject.title}</h3>
-              <p className="text-gray-600">{featuredProject.description}</p>
-              <p className="mt-2"><strong>Technology:</strong> {featuredProject.technology}</p>
-            </div>
-          ) : (
-            <div className="spinner"></div>
-          )}
-        </div>
+      {/* About Me Section using Tailwind */}
+      <section className="flex flex-col items-left justify-center py-8 px-8">
+        <h2 className="text-4xl font-semibold text-gray-800 mb-6">ABOUT ME</h2>
+        <p className="text-lg text-gray-700 max-w-3xl text-justify mb-6">
+        Hi, I'm Benedict Ibhawaegbele, a Computer Science student at the University of Exeter. I am passionate about software engineering, with a strong interest in building innovative and efficient solutions. My skills include developing web applications and working on various web development projects. I am constantly seeking to improve my abilities and stay up-to-date with the latest technologies to build impactful and meaningful software.  
+        </p>
 
-        <div className="bg-card p-4 rounded-lg shadow-lg">
-          <h2 className="text-2xl font-bold mb-4">Latest Blog Post</h2>
-          {latestBlogPost ? (
-            <div>
-              <img
-                src={latestBlogPost.image}  // Supabase image URL stored in the database
-                alt={latestBlogPost.title}
-                className="w-full h-40 object-cover rounded-lg mb-4"
-              />
-              <h3 className="text-xl font-semibold">{latestBlogPost.title}</h3>
-              <p className="text-gray-600">{latestBlogPost.excerpt}</p>
-            </div>
-          ) : (
-            <div className="spinner"></div>
-          )}
-        </div>
+
       </section>
+
     </div>
   );
 }
