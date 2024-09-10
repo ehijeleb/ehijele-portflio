@@ -1,6 +1,6 @@
 # Portfolio Website
 
-This project is a personal portfolio website that showcases projects and blog posts. It is built using React for the frontend and Django for the backend. The backend also uses PostgreSQL as the database and AWS S3 for media storage. The project is deployed using Render.
+This project is a personal portfolio website that showcases projects . It is built using NextJS for the frontend. The backend  uses PostgreSQL as the database and Supabase Storagefor media storage. The project is deployed using Vercel.
 
 ## Table of Contents
 
@@ -8,7 +8,6 @@ This project is a personal portfolio website that showcases projects and blog po
 - [Technologies Used](#technologies-used)
 - [Setup and Installation](#setup-and-installation)
 - [Usage](#usage)
-- [API Endpoints](#api-endpoints)
 - [Contact](#contact)
 
 ## Features
@@ -93,13 +92,7 @@ This project is a personal portfolio website that showcases projects and blog po
 - Manage content via supabase dashboard
 
 
-## API Endpoints
-
-- GET ` /api/portfolio/projects/`: retrieve all projects
-- GET `/api/portfolio/featured-project/` : Retrieve the featured project
-- GET `/api/blog/`: Retrieve all blog posts
-- POST `/api/contact/` : Submit a contact form
 
 ## Contact 
 
-For any inquiries, please reach out through the [Contact Form](https://portfolio-project-2-uc64.onrender.com/contact) or email at `benedict.ibha@gmail.com`
+For any inquiries, please reach out through the [Contact Form](https://ehijele-portflio.vercel.app/) or email at `benedict.ibha@gmail.com`
