@@ -62,7 +62,7 @@ function PortfolioList() {
   return (
     <div className="portfolio-list">
       <nav className="bg-stone-900 py-4 px-8 flex justify-between items-center">
-        <div className="text-neutral-500 font-bold">Benedict Ibhawaegbele</div>
+        <div className="text-neutral-500 font-bold"></div>
         <ul className="flex space-x-4">
           <li><a href="/" className="text-white hover:text-gray-500">Home</a></li>
           <li><a href="/projects" className="text-white hover:text-gray-500">Projects</a></li>
