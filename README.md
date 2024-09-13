@@ -21,7 +21,7 @@ This project is a personal portfolio website that showcases projects . It is bui
 ## Technologies Used
 
 ### Frontend
-- **React:** 
+- **ReactJS** 
 - **Tailwind CSS** 
 - **React Router** 
 
