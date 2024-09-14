@@ -79,7 +79,7 @@ function Home() {
         </div>
       </header>
 
-      {/* About Me Section using Tailwind */}
+      {/* About Me Section*/}
       <section className="flex flex-col lg:ml-16 items-left justify-center py-8 px-8">
         <h2 className="text-2xl lg:text-4xl font-semibold text-gray-800 mb-6">ABOUT ME</h2>
         <p className="text-lg lg:text-lg text-gray-700 max-w-3xl text-justify mb-6">
