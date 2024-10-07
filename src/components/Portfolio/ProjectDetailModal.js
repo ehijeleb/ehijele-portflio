@@ -2,8 +2,7 @@ import React from 'react';
 import { Modal, ModalContent, ModalHeader, ModalBody} from "@nextui-org/react";
 
 const ProjectDetailModal = ({ isOpen, onClose, project }) => {
-  if (!project) return null; // Ensure the project exists before rendering
-
+  if (!project) return null; 
   return (
     <Modal
       isOpen={isOpen}
@@ -23,6 +22,7 @@ const ProjectDetailModal = ({ isOpen, onClose, project }) => {
           />
           <p className="mb-4">{project.description}</p>
           <p><strong>Technology:</strong> {project.technology}</p>
+          <p className="text-center py-2"><strong><a href = {project.github_link}>GitHub Link</a> </strong></p>
         </ModalBody>
 
       </ModalContent>
