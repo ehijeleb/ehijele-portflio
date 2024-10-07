@@ -24,7 +24,7 @@ function Home() {
 
     fetchFeaturedProject();
 
-    // Initialize the Typed.js effect on the header
+
     const typed = new Typed(typedElement.current, {
       strings: ["Hello, I'm Benedict Ibhawaegbele"],
       typeSpeed: 50,
@@ -32,7 +32,6 @@ function Home() {
     });
 
     return () => {
-      // Destroy Typed instance during cleanup to stop animation
       typed.destroy();
     };
   }, []);

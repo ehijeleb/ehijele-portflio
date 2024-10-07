@@ -50,11 +50,11 @@ function PortfolioList() {
   };
 
   const closeModal = () => {
-    setSelectedProject(null);    // Clear the selected project
-    setIsModalOpen(false);       // Close the modal
+    setSelectedProject(null);    
+    setIsModalOpen(false);       
   };
 
-  // Filter out the featured project from the main list
+
   const filteredProjects = projects.filter(
     (project) => featuredProject && project.id !== featuredProject.id
   );
