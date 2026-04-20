@@ -1,126 +1,147 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { supabase } from './supabaseClient';  // Import your Supabase client
+import React, { useEffect, useRef, useState } from 'react';
 import Typed from 'typed.js';
+import Navbar from './Navbar';
+import TechTag from './TechTag';
+import projects from '../data/projects';
+
+const SKILLS = [
+  { name: 'Python',      src: 'https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg' },
+  { name: 'JavaScript',  src: 'https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png' },
+  { name: 'TypeScript',  src: 'https://upload.wikimedia.org/wikipedia/commons/4/4c/Typescript_logo_2020.svg' },
+  { name: 'React',       src: 'https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg' },
+  { name: 'Next.js',     src: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nextjs/nextjs-original.svg' },
+  { name: 'PostgreSQL',  src: 'https://upload.wikimedia.org/wikipedia/commons/2/29/Postgresql_elephant.svg' },
+  { name: 'Tailwind CSS',src: 'https://upload.wikimedia.org/wikipedia/commons/d/d5/Tailwind_CSS_Logo.svg' },
+  { name: 'Git',         src: 'https://upload.wikimedia.org/wikipedia/commons/3/3f/Git_icon.svg' },
+  { name: 'HTML',        src: 'https://upload.wikimedia.org/wikipedia/commons/3/38/HTML5_Badge.svg' },
+];
 
 function Home() {
-  const [featuredProject, setFeaturedProject] = useState(null);
-  const typedElement = useRef(null);  // Create a reference for the typed element
+  const typedElement = useRef(null);
+  const [profileImgError, setProfileImgError] = useState(false);
+  const [featuredImgError, setFeaturedImgError] = useState(false);
+
+  const featured = projects.find(p => p.featured);
 
   useEffect(() => {
-    // Fetch the featured project from Supabase
-    const fetchFeaturedProject = async () => {
-      const { data, error } = await supabase
-        .from('project')
-        .select('*')
-        .eq('featured', true)
-        .single();  // Assuming there's only one featured project
-
-      if (error) {
-        console.error('Error fetching featured project:', error);
-      } else {
-        setFeaturedProject(data);
-      }
-    };
-
-    fetchFeaturedProject();
-
-
     const typed = new Typed(typedElement.current, {
       strings: ["Hello, I'm Benedict Ibhawaegbele"],
       typeSpeed: 50,
-      showCursor: true,  
+      showCursor: true,
     });
-
-    return () => {
-      typed.destroy();
-    };
+    return () => typed.destroy();
   }, []);
 
   return (
-    <div className="home">
-      <nav className="bg-stone-900 py-4 px-8 flex justify-between items-center">
-        <div className="text-neutral-500 font-bold"></div>
-        <ul className="flex space-x-4">
-          <li><a href="/" className="text-white hover:text-gray-500">Home</a></li>
-          <li><a href="/projects" className="text-white hover:text-gray-500">Projects</a></li>
-          <li><a href="/contact" className="text-white hover:text-gray-500">Contact</a></li>
-        </ul>
-      </nav>
+    <div className="min-h-screen bg-neutral-50">
+      <Navbar />
 
-      <header className="text-primary py-12 sm:py-20 lg:py-16 lg:px-8 flex items-center justify-between">
-      {/* Static Image div */}
-        <div className="ml-4 lg:ml-56">
-          <img
-            src="https://ysyvmxkeecxnnfoarkad.supabase.co/storage/v1/object/sign/project-images/1718257818818.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJwcm9qZWN0LWltYWdlcy8xNzE4MjU3ODE4ODE4LmpwZyIsImlhdCI6MTcyNTgxNTk1MywiZXhwIjoxNzU3MzUxOTUzfQ._XxpPEF6fZRD2cPT4sl53oGa2PN7jvER3cdJRM1RYEI&t=2024-09-08T17%3A19%3A13.933Z"
-            alt="Profile"
-            className="w-24 h-24 lg:w-48 lg:h-48 rounded-full  border-2 lg:border-4 border-black aspect-square object-cover"
-          />
+      {/* Hero */}
+      <header className="bg-white border-b border-gray-100 py-16 px-8 flex items-center justify-between max-w-5xl mx-auto">
+        <div className="flex-shrink-0">
+          {!profileImgError ? (
+            <img
+              src="/profile.jpg"
+              alt="Profile"
+              className="w-28 h-28 lg:w-44 lg:h-44 rounded-full border-2 border-gray-200 object-cover"
+              onError={() => setProfileImgError(true)}
+            />
+          ) : (
+            <div className="w-28 h-28 lg:w-44 lg:h-44 rounded-full border-2 border-gray-200 bg-stone-800 flex items-center justify-center">
+              <span className="text-white text-4xl font-bold">BI</span>
+            </div>
+          )}
         </div>
 
-
-        {/* Typing Text div */}
-        <div className="text-container text-right lg:mr-32 ">
-          <h1 className="text-md lg:text-4xl font-extrabold mb-2">
+        <div className="text-right ml-8">
+          <h1 className="text-xl lg:text-4xl font-extrabold text-gray-900 mb-2">
             <span ref={typedElement} />
           </h1>
-          <h2 className="text-sm lg:text-xl text-gray-600">
-            An ambitious Software Engineer
-          </h2>
-
-          <div className="flex justify-end space-x-4 mt-4">
+          <p className="text-sm lg:text-lg text-gray-500 mb-5">Software Engineer</p>
+          <div className="flex justify-end items-center space-x-4">
             <a href="https://www.linkedin.com/in/benedict-ibhawaegbele-6b585b1aa/" target="_blank" rel="noopener noreferrer">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" className="w-8 h-8"/>
+              <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" className="w-7 h-7" />
             </a>
             <a href="https://github.com/ehijeleb" target="_blank" rel="noopener noreferrer">
-              <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub" className="w-8 h-8"/>
+              <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub" className="w-7 h-7" />
             </a>
           </div>
         </div>
       </header>
 
-      {/* About Me Section*/}
-      <section className="flex flex-col lg:ml-16 items-left justify-center py-8 px-8">
-        <h2 className="text-2xl lg:text-4xl font-semibold text-gray-800 mb-6">ABOUT ME</h2>
-        <p className="text-lg lg:text-lg text-gray-700 max-w-3xl text-justify mb-6">
-        Hi, I'm Benedict Ibhawaegbele, a Computer Science student at the University of Exeter. I am passionate about software engineering, with a strong interest in building innovative and efficient solutions. My skills include developing web applications and working on various web development projects. I am constantly seeking to improve my abilities and stay up-to-date with the latest technologies to build impactful and meaningful software.  
-        </p>
-      </section>
+      <div className="max-w-5xl mx-auto px-8">
+        {/* About */}
+        <section className="py-12 border-b border-gray-100">
+          <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-5 uppercase tracking-wide">About Me</h2>
+          <p className="text-base lg:text-lg text-gray-600 max-w-2xl leading-relaxed text-justify">
+            Hi, I'm Benedict Ibhawaegbele, a Computer Science student at the University of Exeter.
+            I'm passionate about building innovative and efficient software, with experience spanning
+            web applications, data-driven tools, and mobile development. I'm constantly learning and
+            enjoy working on projects that create real impact.
+          </p>
+        </section>
 
-      <section className="flex flex-col items-center lg:items-end justify-center lg:py-4 px-8 lg:px-32">
-        <h2 className="text-2xl lg:text-4xl font-semibold text-gray-800 mb-6">SKILLS</h2>
-        <div className="flex flex-wrap justify-center lg:justify-end gap-6">
-          <div className="text-center">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg" alt="Python" className="w-16 h-16"/>
-            <p>Python</p>
+        {/* Skills */}
+        <section className="py-12 border-b border-gray-100">
+          <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-8 uppercase tracking-wide">Skills</h2>
+          <div className="flex flex-wrap gap-8">
+            {SKILLS.map(({ name, src }) => (
+              <div key={name} className="flex flex-col items-center gap-2 group">
+                <img
+                  src={src}
+                  alt={name}
+                  className="w-12 h-12 object-contain transition-transform duration-150 group-hover:scale-110"
+                />
+                <span className="text-xs text-gray-500 font-medium">{name}</span>
+              </div>
+            ))}
           </div>
-          <div className="text-center">
-            <img src="https://ysyvmxkeecxnnfoarkad.supabase.co/storage/v1/object/sign/project-images/nextjs-icon-svgrepo-com.svg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJwcm9qZWN0LWltYWdlcy9uZXh0anMtaWNvbi1zdmdyZXBvLWNvbS5zdmciLCJpYXQiOjE3MjU4MzM1ODQsImV4cCI6MTc1NzM2OTU4NH0.31Rq-AKy6jiXrdrVODxgDzHlTiBrUy4dvcTYCAWpApg&t=2024-09-08T22%3A13%3A03.774Z" alt="NextJS" className="w-16 h-16"/>
-            <p>Next.JS</p>
-          </div>
-          <div className="text-center">
-            <img src="https://ysyvmxkeecxnnfoarkad.supabase.co/storage/v1/object/sign/project-images/react-2.svg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJwcm9qZWN0LWltYWdlcy9yZWFjdC0yLnN2ZyIsImlhdCI6MTcyNTgzMzY3OSwiZXhwIjoxNzU3MzY5Njc5fQ.-nN1cP3AD3shMKsK1jVIDeNl1zj5PgCCrRvAuFZ6Viw&t=2024-09-08T22%3A14%3A39.071Z" alt="ReactJS" className="w-16 h-16"/>
-            <p>React</p>
-          </div>
-          <div className="text-center">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/29/Postgresql_elephant.svg" alt="PSQL" className="w-16 h-16"/>
-            <p>PostgreSQL</p>
-          </div>
-          <div className="text-center">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/d/d5/Tailwind_CSS_Logo.svg" alt="TailwindCSS" className="w-16 h-16"/>
-            <p>TailwindCSS</p>
-          </div>
-          <div className="text-center">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/3/3f/Git_icon.svg" alt="Git" className="w-16 h-16"/>
-            <p>Git</p>
-          </div>
-          <div className="text-center">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/3/38/HTML5_Badge.svg" alt="HTML" className="w-16 h-16"/>
-            <p>HTML</p>
-          </div>
-        </div>
-      </section>
+        </section>
 
-
+        {/* Featured Project */}
+        {featured && (
+          <section className="py-12">
+            <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-8 uppercase tracking-wide">Featured Project</h2>
+            <a
+              href="/projects"
+              className="block bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 overflow-hidden"
+            >
+              <div className="flex flex-col md:flex-row">
+                <div className="md:w-2/5 h-52 bg-gradient-to-br from-gray-800 to-gray-600 overflow-hidden">
+                  {!featuredImgError ? (
+                    <img
+                      src={featured.image}
+                      alt={featured.title}
+                      className="w-full h-full object-cover"
+                      onError={() => setFeaturedImgError(true)}
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <span className="text-white text-5xl font-bold opacity-20">{featured.title.charAt(0)}</span>
+                    </div>
+                  )}
+                </div>
+                <div className="p-7 flex flex-col justify-center md:w-3/5">
+                  <span className="text-xs font-semibold uppercase tracking-widest text-amber-600 mb-2">Featured</span>
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">{featured.title}</h3>
+                  <p className="text-gray-600 text-sm leading-relaxed mb-4">{featured.description}</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {featured.technologies.map(t => <TechTag key={t} tech={t} />)}
+                  </div>
+                </div>
+              </div>
+            </a>
+            <div className="mt-6 text-center">
+              <a
+                href="/projects"
+                className="inline-block px-6 py-2.5 bg-stone-900 text-white text-sm font-medium rounded-lg hover:bg-stone-700 transition-colors duration-150"
+              >
+                View all projects →
+              </a>
+            </div>
+          </section>
+        )}
+      </div>
     </div>
   );
 }
