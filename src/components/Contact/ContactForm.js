@@ -1,18 +1,12 @@
 import React from 'react';
+import Navbar from '../Navbar';
 
 function ContactForm() {
   return (
-    <div>
-      <nav className="bg-stone-900 py-4 px-8 flex justify-between items-center">
-        <div className="text-neutral-500 font-bold"></div>
-        <ul className="flex space-x-4">
-          <li><a href="/" className="text-white hover:text-gray-500">Home</a></li>
-          <li><a href="/projects" className="text-white hover:text-gray-500">Projects</a></li>
-          <li><a href="/contact" className="text-white hover:text-gray-500">Contact</a></li>
-        </ul>
-      </nav>
+    <div className="min-h-screen bg-neutral-50">
+      <Navbar />
 
-      <div className="contact-form max-w-md mt-16 mx-auto bg-card text-card-foreground p-6 rounded-lg shadow-lg">
+      <div className="contact-form max-w-md mt-16 mx-auto bg-white border border-gray-200 text-card-foreground p-8 rounded-xl shadow-sm">
         <h2 className="text-2xl font-bold mb-4">Contact Me</h2>
 
         <form 
@@ -85,5 +79,6 @@ function ContactForm() {
     </div>
   );
 }
+
 
 export default ContactForm;

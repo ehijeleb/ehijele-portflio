@@ -6,7 +6,7 @@ const supabaseAnonKey = process.env.REACT_APP_SUPABASE_ANON_KEY;
 
 
 if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error("Supabase URL and anon key are required.");
+  console.warn("Supabase URL and anon key are not set — Supabase features will be unavailable.");
 }
 
 
