@@ -7,8 +7,8 @@ const projects = [
     technologies: ["Next.js", "Supabase", "PostgreSQL", "Tailwind CSS"],
     image: "/images/projects/solemate.jpg",
     github_link: "https://github.com/ehijeleb/SoleMate",
-    live_link: null,
-    featured: false,
+    live_link: "https://sole-mate-omega.vercel.app/",
+    featured: true,
   },
   {
     id: 2,
@@ -30,7 +30,7 @@ const projects = [
     image: "/images/projects/edoroad.jpg",
     github_link: "https://github.com/ehijeleb/EdoRoad",
     live_link: "https://edo-road.vercel.app",
-    featured: true,
+    featured: false,
   },
   {
     id: 4,
