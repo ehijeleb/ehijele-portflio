@@ -8,7 +8,7 @@ const projects = [
     image: "/images/projects/solemate.jpg",
     github_link: "https://github.com/ehijeleb/SoleMate",
     live_link: null,
-    featured: true,
+    featured: false,
   },
   {
     id: 2,
@@ -30,7 +30,7 @@ const projects = [
     image: "/images/projects/edoroad.jpg",
     github_link: "https://github.com/ehijeleb/EdoRoad",
     live_link: "https://edo-road.vercel.app",
-    featured: false,
+    featured: true,
   },
   {
     id: 4,

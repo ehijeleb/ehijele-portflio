@@ -1,29 +1,29 @@
 import React from 'react';
 
 const TAG_COLORS = {
-  'Next.js':      'bg-gray-900 text-white',
-  'React':        'bg-blue-100 text-blue-800',
-  'React Native': 'bg-blue-100 text-blue-800',
-  'Python':       'bg-yellow-100 text-yellow-800',
-  'Flask':        'bg-gray-100 text-gray-700',
-  'JavaScript':   'bg-yellow-50 text-yellow-700 border border-yellow-200',
-  'TypeScript':   'bg-blue-50 text-blue-700 border border-blue-200',
-  'Supabase':     'bg-emerald-100 text-emerald-800',
-  'PostgreSQL':   'bg-sky-100 text-sky-800',
-  'Tailwind CSS': 'bg-cyan-100 text-cyan-800',
-  'Vite':         'bg-purple-100 text-purple-800',
-  'Expo':         'bg-gray-100 text-gray-700',
-  'Scikit-learn': 'bg-orange-100 text-orange-800',
-  'Node.js':      'bg-green-100 text-green-800',
-  'Spotipy':      'bg-green-100 text-green-800',
-  'HTML':         'bg-orange-50 text-orange-700 border border-orange-200',
-  'CSS':          'bg-blue-50 text-blue-700 border border-blue-200',
+  'Next.js':      'bg-slate-700 text-slate-200 border-slate-600',
+  'React':        'bg-blue-950 text-blue-300 border-blue-800',
+  'React Native': 'bg-blue-950 text-blue-300 border-blue-800',
+  'Python':       'bg-yellow-950 text-yellow-300 border-yellow-800',
+  'Flask':        'bg-slate-800 text-slate-300 border-slate-600',
+  'JavaScript':   'bg-yellow-950 text-yellow-300 border-yellow-800',
+  'TypeScript':   'bg-blue-950 text-blue-300 border-blue-900',
+  'Supabase':     'bg-emerald-950 text-emerald-300 border-emerald-800',
+  'PostgreSQL':   'bg-sky-950 text-sky-300 border-sky-800',
+  'Tailwind CSS': 'bg-cyan-950 text-cyan-300 border-cyan-800',
+  'Vite':         'bg-purple-950 text-purple-300 border-purple-800',
+  'Expo':         'bg-slate-800 text-slate-300 border-slate-600',
+  'Scikit-learn': 'bg-orange-950 text-orange-300 border-orange-800',
+  'Node.js':      'bg-green-950 text-green-300 border-green-800',
+  'Spotipy':      'bg-green-950 text-green-300 border-green-800',
+  'HTML':         'bg-orange-950 text-orange-300 border-orange-800',
+  'CSS':          'bg-blue-950 text-blue-300 border-blue-800',
 };
 
 function TechTag({ tech }) {
-  const colorClass = TAG_COLORS[tech] || 'bg-gray-100 text-gray-700';
+  const colorClass = TAG_COLORS[tech] || 'bg-slate-800 text-slate-300 border-slate-600';
   return (
-    <span className={`inline-block px-2 py-0.5 rounded text-xs font-medium ${colorClass}`}>
+    <span className={`inline-block px-2.5 py-0.5 rounded-md text-xs font-medium border ${colorClass}`}>
       {tech}
     </span>
   );
