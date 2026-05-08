@@ -6,46 +6,54 @@ import Navbar from '../Navbar';
 import TechTag from '../TechTag';
 import MouseGlow from '../MouseGlow';
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
-};
-
-const stagger = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.1 } },
-};
-
-function ProjectCard({ project, onClick }) {
+function ProjectCard({ project, onClick, animDelay = 0, floatDelay = 0 }) {
   const [imgError, setImgError] = useState(false);
 
   return (
+    <div style={{ animation: `bob-sm ${4.5 + (animDelay % 5) * 0.5}s ${floatDelay}s infinite ease-in-out` }}>
     <motion.div
-      className="bg-slate-800 border border-slate-700 rounded-xl overflow-hidden cursor-pointer flex flex-col group hover:border-amber-400/40 transition-colors duration-200"
-      variants={fadeUp}
+      className="bg-slate-800 border border-slate-700 rounded-xl overflow-hidden cursor-pointer flex flex-col group hover:border-amber-400/40 hover:shadow-[0_0_0_1px_rgba(245,158,11,0.12),0_8px_32px_rgba(0,0,0,0.4)] transition-all duration-300"
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, ease: 'easeOut', delay: animDelay * 0.1 }}
       whileHover={{ y: -6 }}
-      transition={{ duration: 0.2 }}
       onClick={onClick}
     >
-      <div className="h-44 bg-slate-700 overflow-hidden flex-shrink-0">
-        {!imgError ? (
-          <img
-            src={project.image}
-            alt={project.title}
-            className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
-            onError={() => setImgError(true)}
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center">
-            <span className="text-slate-600 text-5xl font-black">{project.title.charAt(0)}</span>
-          </div>
-        )}
+      {/* Image wrapper — relative so the WANTED watermark can sit outside layoutId */}
+      <div className="relative h-44 flex-shrink-0">
+        <motion.div
+          className="absolute inset-0 bg-slate-700 overflow-hidden"
+          layoutId={`project-img-${project.id}`}
+        >
+          {!imgError ? (
+            <img
+              src={project.image}
+              alt={project.title}
+              className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 group-hover:[filter:sepia(0.45)_brightness(0.82)] transition-all duration-500"
+              onError={() => setImgError(true)}
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center">
+              <span className="text-slate-600 text-5xl font-black">{project.title.charAt(0)}</span>
+            </div>
+          )}
+        </motion.div>
+
+        {/* Wanted poster watermark — for those who know */}
+        <div className="absolute bottom-2 right-3 text-amber-400 font-mono text-[8px] tracking-[0.55em] font-black uppercase opacity-0 group-hover:opacity-[0.16] transition-opacity duration-500 pointer-events-none select-none">
+          WANTED
+        </div>
       </div>
 
       <div className="p-5 flex flex-col flex-1">
-        <h3 className="text-base font-semibold text-white mb-2 group-hover:text-amber-400 transition-colors">
+        {/* layoutId on title — slides up into the modal header */}
+        <motion.h3
+          className="text-base font-semibold text-white mb-2"
+          layoutId={`project-title-${project.id}`}
+        >
           {project.title}
-        </h3>
+        </motion.h3>
         <p className="text-sm text-slate-400 flex-1 mb-3 line-clamp-3 leading-relaxed">
           {project.description}
         </p>
@@ -79,6 +87,7 @@ function ProjectCard({ project, onClick }) {
         </div>
       </div>
     </motion.div>
+    </div>
   );
 }
 
@@ -93,17 +102,26 @@ function PortfolioList() {
     <div
       className="min-h-screen text-white"
       style={{
-        backgroundColor: '#020617',
+        backgroundColor: '#080e1a',
         backgroundImage: 'radial-gradient(350px at var(--mx, -1000px) var(--my, -1000px), rgba(245, 158, 11, 0.13), transparent 70%)',
       }}
     >
       <MouseGlow />
       <Navbar />
 
-      {/* Header — pt accounts for the floating navbar height */}
       <header className="border-b border-slate-800 pt-36 pb-16 px-8 text-center relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 left-1/3 w-96 h-96 bg-amber-500/4 rounded-full blur-3xl" />
+        {/* Sky horizon gradient */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{ background: 'radial-gradient(ellipse 100% 60% at 50% 0%, rgba(56,189,248,0.14) 0%, transparent 70%)' }}
+        />
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <motion.div
+            className="absolute top-0 left-1/3 w-96 h-96 rounded-full blur-3xl"
+            style={{ background: 'rgba(34,211,238,0.10)' }}
+            animate={{ x: [0, 24, -16, 0], y: [0, -16, 20, 0] }}
+            transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut', repeatType: 'mirror' }}
+          />
         </div>
         <motion.p
           className="text-xs font-mono text-amber-400 tracking-[0.3em] uppercase mb-3"
@@ -139,6 +157,7 @@ function PortfolioList() {
               <span className="text-xs font-mono text-amber-400 tracking-[0.3em] uppercase">Featured</span>
               <div className="h-px flex-1 bg-slate-800" />
             </div>
+            <div style={{ animation: 'bob-sm 6s 1.2s infinite ease-in-out' }}>
             <motion.div
               className="bg-slate-800 border border-slate-700 rounded-2xl overflow-hidden cursor-pointer group hover:border-amber-400/40 transition-colors duration-300 flex flex-col md:flex-row"
               initial={{ opacity: 0, y: 24 }}
@@ -147,7 +166,11 @@ function PortfolioList() {
               whileHover={{ y: -4 }}
               onClick={() => setSelectedProject(featured)}
             >
-              <div className="md:w-5/12 h-56 md:h-auto bg-slate-700 overflow-hidden flex-shrink-0">
+              {/* layoutId on featured image container */}
+              <motion.div
+                className="md:w-5/12 h-56 md:h-auto bg-slate-700 overflow-hidden flex-shrink-0"
+                layoutId={`project-img-${featured.id}`}
+              >
                 {!featuredImgError ? (
                   <img
                     src={featured.image}
@@ -160,11 +183,15 @@ function PortfolioList() {
                     <span className="text-slate-600 text-7xl font-black">{featured.title.charAt(0)}</span>
                   </div>
                 )}
-              </div>
+              </motion.div>
               <div className="p-8 flex flex-col justify-center md:w-7/12">
-                <h2 className="text-2xl font-bold text-white mb-3 group-hover:text-amber-50 transition-colors">
+                {/* layoutId on featured title */}
+                <motion.h2
+                  className="text-2xl font-bold text-white mb-3"
+                  layoutId={`project-title-${featured.id}`}
+                >
                   {featured.title}
-                </h2>
+                </motion.h2>
                 <p className="text-slate-400 leading-relaxed mb-5">{featured.description}</p>
                 <div className="flex flex-wrap gap-2 mb-6">
                   {featured.technologies.map(t => <TechTag key={t} tech={t} />)}
@@ -194,6 +221,7 @@ function PortfolioList() {
                 </div>
               </div>
             </motion.div>
+            </div>
           </div>
         )}
 
@@ -202,20 +230,17 @@ function PortfolioList() {
           <span className="text-xs font-mono text-slate-500 tracking-[0.3em] uppercase">All Projects</span>
           <div className="h-px flex-1 bg-slate-800" />
         </div>
-        <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-          variants={stagger}
-          initial="hidden"
-          animate="visible"
-        >
-          {rest.map(project => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {rest.map((project, i) => (
             <ProjectCard
               key={project.id}
               project={project}
               onClick={() => setSelectedProject(project)}
+              animDelay={i}
+              floatDelay={(i * 0.55) % 3.5}
             />
           ))}
-        </motion.div>
+        </div>
       </main>
 
       <ProjectDetailModal
