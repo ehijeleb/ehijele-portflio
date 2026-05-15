@@ -1,29 +1,42 @@
 import React from 'react';
 
-const TAG_COLORS = {
-  'Next.js':      'bg-slate-700 text-slate-200 border-slate-600',
-  'React':        'bg-blue-950 text-blue-300 border-blue-800',
-  'React Native': 'bg-blue-950 text-blue-300 border-blue-800',
-  'Python':       'bg-yellow-950 text-yellow-300 border-yellow-800',
-  'Flask':        'bg-slate-800 text-slate-300 border-slate-600',
-  'JavaScript':   'bg-yellow-950 text-yellow-300 border-yellow-800',
-  'TypeScript':   'bg-blue-950 text-blue-300 border-blue-900',
-  'Supabase':     'bg-emerald-950 text-emerald-300 border-emerald-800',
-  'PostgreSQL':   'bg-sky-950 text-sky-300 border-sky-800',
-  'Tailwind CSS': 'bg-cyan-950 text-cyan-300 border-cyan-800',
-  'Vite':         'bg-purple-950 text-purple-300 border-purple-800',
-  'Expo':         'bg-slate-800 text-slate-300 border-slate-600',
-  'Scikit-learn': 'bg-orange-950 text-orange-300 border-orange-800',
-  'Node.js':      'bg-green-950 text-green-300 border-green-800',
-  'Spotipy':      'bg-green-950 text-green-300 border-green-800',
-  'HTML':         'bg-orange-950 text-orange-300 border-orange-800',
-  'CSS':          'bg-blue-950 text-blue-300 border-blue-800',
+// Three muted families so cards stay calm and the amber CTA stays loud:
+//   language → warm slate
+//   framework / library → cool slate
+//   infra / data → mid slate
+const TAG_FAMILY = {
+  language: 'bg-slate-800 text-slate-200 border-slate-600',
+  framework: 'bg-slate-800/70 text-slate-300 border-slate-700',
+  infra: 'bg-slate-900 text-slate-400 border-slate-700',
+};
+
+const TAG_TO_FAMILY = {
+  // languages
+  'Python': 'language',
+  'JavaScript': 'language',
+  'TypeScript': 'language',
+  'HTML': 'language',
+  'CSS': 'language',
+  // frameworks / libraries
+  'React': 'framework',
+  'React Native': 'framework',
+  'Next.js': 'framework',
+  'Flask': 'framework',
+  'Tailwind CSS': 'framework',
+  'Vite': 'framework',
+  'Expo': 'framework',
+  'Scikit-learn': 'framework',
+  'Spotipy': 'framework',
+  'Node.js': 'framework',
+  // infra / data
+  'Supabase': 'infra',
+  'PostgreSQL': 'infra',
 };
 
 function TechTag({ tech }) {
-  const colorClass = TAG_COLORS[tech] || 'bg-slate-800 text-slate-300 border-slate-600';
+  const family = TAG_TO_FAMILY[tech] || 'framework';
   return (
-    <span className={`inline-block px-2.5 py-0.5 rounded-md text-xs font-medium border ${colorClass}`}>
+    <span className={`inline-block px-2.5 py-0.5 rounded-md text-xs font-mono font-medium border ${TAG_FAMILY[family]}`}>
       {tech}
     </span>
   );

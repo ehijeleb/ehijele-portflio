@@ -1,6 +1,6 @@
 # Portfolio Website
 
-This project is a personal portfolio website that showcases projects . It is built using NextJS for the frontend. The backend  uses PostgreSQL as the database and Supabase Storagefor media storage. The project is deployed using Vercel.
+This project is a personal portfolio website that showcases projects. It is built with React (Create React App) and Tailwind CSS for the frontend, with Supabase (PostgreSQL + Storage) on the backend. The site is deployed on Vercel.
 
 ## Table of Contents
 
@@ -21,9 +21,11 @@ This project is a personal portfolio website that showcases projects . It is bui
 ## Technologies Used
 
 ### Frontend
-- **ReactJS** 
-- **Tailwind CSS** 
-- **React Router** 
+- **React** (Create React App)
+- **Tailwind CSS**
+- **React Router**
+- **framer-motion** (page + scroll animations)
+- **Lenis** (smooth scroll)
 
 ### Backend
 - **Supabase**
