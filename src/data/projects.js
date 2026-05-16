@@ -18,7 +18,7 @@ const projects = [
     technologies: ["Next.js", "TypeScript", "FastAPI", "XGBoost", "LightGBM", "SHAP", "Tailwind CSS"],
     image: "/images/projects/plbets.jpg",
     github_link: "https://github.com/ehijeleb/PLBetsV2",
-    live_link: null,
+    live_link: "https://pl-bets-v2.vercel.app/",
     featured: false,
   },
   {
