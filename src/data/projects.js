@@ -14,10 +14,10 @@ const projects = [
     id: 2,
     title: "PLBets",
     description:
-      "A full-stack app that uses a Random Forest classifier to predict Premier League match outcomes and generate data-driven betting tips from historical statistics.",
-    technologies: ["Next.js", "Python", "Flask", "Scikit-learn", "Tailwind CSS"],
+      "Real-time Premier League prediction dashboard powered by a multi-model ML ensemble. Analyses team form, head-to-head history, and live standings to generate explainable match outcome and goal predictions.",
+    technologies: ["Next.js", "TypeScript", "FastAPI", "XGBoost", "LightGBM", "SHAP", "Tailwind CSS"],
     image: "/images/projects/plbets.jpg",
-    github_link: "https://github.com/ehijeleb/PLBets",
+    github_link: "https://github.com/ehijeleb/PLBetsV2",
     live_link: null,
     featured: false,
   },
