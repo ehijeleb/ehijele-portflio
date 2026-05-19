@@ -14,6 +14,13 @@ import TechTag from './TechTag';
 import MouseGlow from './MouseGlow';
 import projects from '../data/projects';
 import JollyRoger from './JollyRoger';
+import {
+  EASE_OUT_EXPO,
+  SPRING_SOFT,
+  SPRING_SNAPPY,
+  AnimatedArrow,
+  NudgeOnHover,
+} from '../animations';
 
 // Deterministic particle data for hero floating dots
 const PARTICLES = [
@@ -44,16 +51,17 @@ const SKILLS = [
 const stripHtml = (html) => html?.replace(/<[^>]+>/g, '').trim() || '';
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 28 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } },
+  hidden: { opacity: 0, y: 24 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: EASE_OUT_EXPO } },
 };
 
 const stagger = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.09 } },
+  visible: { transition: { staggerChildren: 0.07, delayChildren: 0.05 } },
 };
 
-// Magnetic wrapper — attracts toward the cursor on hover (disabled when reduced-motion is on)
+// Magnetic wrapper — attracts toward the cursor on hover, and drives a "nudge"
+// variant so child <AnimatedArrow /> can slide right in sync (disabled when reduced-motion is on)
 function MagneticButton({ href, children, className, ...props }) {
   const ref = useRef(null);
   const reduce = useReducedMotion();
@@ -78,6 +86,10 @@ function MagneticButton({ href, children, className, ...props }) {
       onMouseMove={onMouseMove}
       onMouseLeave={onMouseLeave}
       className={className}
+      initial="rest"
+      animate="rest"
+      whileHover="nudge"
+      whileFocus="nudge"
       {...props}
     >
       {children}
@@ -88,6 +100,7 @@ function MagneticButton({ href, children, className, ...props }) {
 function WritingPreview() {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
+  const reduce = useReducedMotion();
 
   useEffect(() => {
     fetch('https://api.rss2json.com/v1/api.json?rss_url=https://ehijele.substack.com/feed')
@@ -112,14 +125,15 @@ function WritingPreview() {
         <p className="text-xs font-mono text-treasure tracking-[0.3em] uppercase mb-3">Writing</p>
         <div className="flex items-end justify-between mb-10 gap-4">
           <h2 className="font-display text-3xl lg:text-4xl font-bold text-white">Latest Articles</h2>
-          <a
+          <NudgeOnHover
+            as={motion.a}
             href="https://substack.com/@ehijele"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-sm text-treasure hover:text-treasure-400 font-medium transition-colors whitespace-nowrap"
+            className="inline-flex items-center gap-1.5 text-sm text-treasure hover:text-treasure-400 font-medium transition-colors whitespace-nowrap"
           >
-            All articles →
-          </a>
+            All articles <AnimatedArrow />
+          </NudgeOnHover>
         </div>
 
         {loading ? (
@@ -136,12 +150,12 @@ function WritingPreview() {
                 href={article.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-slate-800 border border-slate-700 rounded-xl p-6 cursor-pointer hover:border-treasure/50 transition-all duration-200 group block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-treasure/70"
-                initial={{ opacity: 0, y: 20 }}
+                className="bg-slate-800 border border-slate-700 rounded-xl p-6 cursor-pointer hover:border-treasure/50 transition-colors duration-200 group block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-treasure/70"
+                initial={{ opacity: 0, y: 18 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1, duration: 0.5 }}
-                whileHover={{ y: -4 }}
+                viewport={{ once: true, margin: '-60px' }}
+                transition={{ delay: i * 0.08, duration: 0.5, ease: EASE_OUT_EXPO }}
+                whileHover={reduce ? undefined : { y: -4, transition: SPRING_SOFT }}
               >
                 <p className="text-xs text-slate-500 mb-3 font-mono">
                   {new Date(article.pubDate).toLocaleDateString('en-GB', {
@@ -162,8 +176,8 @@ function WritingPreview() {
             href="https://substack.com/@ehijele"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-between px-8 py-6 bg-slate-800 border border-slate-700 hover:border-treasure/50 rounded-xl transition-all duration-200 group cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-treasure/70"
-            whileHover={{ y: -2 }}
+            className="flex items-center justify-between px-8 py-6 bg-slate-800 border border-slate-700 hover:border-treasure/50 rounded-xl transition-colors duration-200 group cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-treasure/70"
+            whileHover={reduce ? undefined : { y: -2, transition: SPRING_SOFT }}
           >
             <div>
               <p className="text-white font-semibold group-hover:text-treasure transition-colors">
@@ -346,9 +360,9 @@ function Home() {
               <MagneticButton
                 href="/projects"
                 aria-label="See projects — set sail"
-                className="px-7 py-3 bg-treasure hover:bg-treasure-400 text-slate-900 font-bold rounded-lg transition-colors duration-200 text-sm shadow-treasure-glow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-treasure/70"
+                className="inline-flex items-center gap-2 px-7 py-3 bg-treasure hover:bg-treasure-400 text-slate-900 font-bold rounded-lg transition-colors duration-200 text-sm shadow-treasure-glow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-treasure/70"
               >
-                Set Sail →
+                Set Sail <AnimatedArrow distance={5} />
               </MagneticButton>
             </motion.div>
           </motion.div>
@@ -422,11 +436,11 @@ function Home() {
                 <li key={name}>
                   <motion.div
                     className="flex flex-col items-center gap-2.5 group cursor-default"
-                    initial={{ opacity: 0, y: 28 }}
+                    initial={{ opacity: 0, y: 24 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, ease: 'easeOut', delay: i * 0.06 }}
-                    whileHover={reduce ? undefined : { y: -6, transition: { duration: 0.18 } }}
+                    viewport={{ once: true, margin: '-40px' }}
+                    transition={{ duration: 0.55, ease: EASE_OUT_EXPO, delay: i * 0.05 }}
+                    whileHover={reduce ? undefined : { y: -6, scale: 1.04, transition: SPRING_SNAPPY }}
                   >
                     <div className="w-14 h-14 bg-slate-800 rounded-xl p-3 flex items-center justify-center border border-slate-700 group-hover:border-treasure/60 group-hover:bg-slate-700 transition-all duration-200">
                       <img
@@ -462,8 +476,7 @@ function Home() {
               <motion.a
                 href="/projects"
                 className="block bg-slate-800 border border-slate-700 rounded-2xl overflow-hidden group cursor-pointer transition-colors duration-300 hover:border-treasure/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-treasure/70"
-                whileHover={{ y: -5 }}
-                transition={{ duration: 0.2 }}
+                whileHover={reduce ? undefined : { y: -5, transition: SPRING_SOFT }}
                 aria-label={`Featured project: ${featured.title} — view all projects`}
               >
                 <div className="flex flex-col md:flex-row">
@@ -504,7 +517,7 @@ function Home() {
                   href="/projects"
                   className="inline-flex items-center gap-2 px-7 py-3 bg-treasure hover:bg-treasure-400 text-slate-900 font-bold rounded-xl transition-colors duration-200 text-sm shadow-treasure-glow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-treasure/70"
                 >
-                  View all projects →
+                  View all projects <AnimatedArrow distance={5} />
                 </MagneticButton>
               </div>
             </motion.div>

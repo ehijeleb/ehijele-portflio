@@ -64,16 +64,21 @@ function Navbar() {
                 href={href}
                 {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                 aria-current={isActive ? 'page' : undefined}
-                className={`text-sm font-medium transition-all duration-150 relative pb-0.5 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-treasure/70 rounded ${
+                className={`group text-sm font-medium transition-colors duration-150 relative pb-0.5 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-treasure/70 rounded ${
                   isActive ? 'text-treasure' : 'text-slate-400 hover:text-white'
                 }`}
               >
                 {label}
-                {isActive && (
+                {isActive ? (
                   <motion.span
                     layoutId="nav-active-indicator"
                     className="absolute -bottom-0.5 left-0 right-0 h-0.5 bg-treasure rounded-full"
                     transition={{ type: 'spring', stiffness: 500, damping: 35 }}
+                  />
+                ) : (
+                  <span
+                    aria-hidden="true"
+                    className="pointer-events-none absolute -bottom-0.5 left-0 right-0 h-0.5 bg-white/60 rounded-full origin-left scale-x-0 group-hover:scale-x-100 group-focus-visible:scale-x-100 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none"
                   />
                 )}
               </a>

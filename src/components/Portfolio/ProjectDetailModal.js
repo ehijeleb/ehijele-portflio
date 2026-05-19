@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { createPortal } from 'react-dom';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import TechTag from '../TechTag';
 import { useLenis } from '../../context/LenisContext';
+import { EASE_OUT_EXPO, SPRING_SOFT, AnimatedArrow, NudgeOnHover } from '../../animations';
 
 const FOCUSABLE = [
   'a[href]', 'button:not([disabled])', 'textarea:not([disabled])',
@@ -14,6 +16,7 @@ const ProjectDetailModal = ({ isOpen, onClose, project }) => {
   const dialogRef = useRef(null);
   const closeBtnRef = useRef(null);
   const previouslyFocused = useRef(null);
+  const reduce = useReducedMotion();
 
   // Lock body scroll + Lenis while open, restore on close
   useEffect(() => {
@@ -67,37 +70,42 @@ const ProjectDetailModal = ({ isOpen, onClose, project }) => {
   }, [isOpen, onClose]);
 
   if (!project) return null;
+  if (typeof document === 'undefined') return null;
 
-  return (
+  return createPortal(
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          data-lenis-prevent
+          className="fixed inset-0 z-50 grid place-items-center p-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
+          transition={{ duration: 0.25, ease: EASE_OUT_EXPO }}
         >
           {/* Backdrop */}
           <motion.div
-            className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/70"
+            style={{ backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)' }}
             onClick={onClose}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={{ duration: 0.25, ease: EASE_OUT_EXPO }}
           />
 
-          {/* Modal shell */}
+          {/* Modal shell — dead-centered via grid wrapper; only opacity + a small scale
+              so the layoutId image/title FLIP doesn't fight a translated parent. */}
           <motion.div
             ref={dialogRef}
             role="dialog"
             aria-modal="true"
             aria-labelledby={`project-modal-title-${project.id}`}
-            className="relative w-full max-w-2xl bg-slate-800 border border-slate-700 rounded-2xl overflow-hidden shadow-2xl"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            className="relative w-full max-w-2xl m-auto bg-slate-800 border border-slate-700 rounded-2xl overflow-hidden shadow-2xl"
+            initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.97 }}
+            animate={reduce ? { opacity: 1 } : { opacity: 1, scale: 1 }}
+            exit={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.98 }}
+            transition={reduce ? { duration: 0.2 } : { ...SPRING_SOFT, opacity: { duration: 0.2, ease: EASE_OUT_EXPO } }}
           >
             {/* Close button */}
             <button
@@ -111,11 +119,7 @@ const ProjectDetailModal = ({ isOpen, onClose, project }) => {
               </svg>
             </button>
 
-            <motion.div
-              className="w-full h-52 bg-slate-700 overflow-hidden"
-              layoutId={`project-img-${project.id}`}
-              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-            >
+            <div className="w-full h-52 bg-slate-700 overflow-hidden">
               {!imgError ? (
                 <img
                   src={project.image}
@@ -128,7 +132,7 @@ const ProjectDetailModal = ({ isOpen, onClose, project }) => {
                   <span className="text-slate-600 text-6xl font-black" aria-hidden="true">{project.title.charAt(0)}</span>
                 </div>
               )}
-            </motion.div>
+            </div>
 
             {/* Content with scroll-shadow hint */}
             <div className="relative">
@@ -138,14 +142,12 @@ const ProjectDetailModal = ({ isOpen, onClose, project }) => {
               <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-6 bg-gradient-to-t from-slate-800 to-transparent z-10" aria-hidden="true" />
 
               <div className="p-7 max-h-[60vh] overflow-y-auto">
-                <motion.h2
+                <h2
                   id={`project-modal-title-${project.id}`}
                   className="font-display text-2xl font-bold text-white mb-3"
-                  layoutId={`project-title-${project.id}`}
-                  transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                 >
                   {project.title}
-                </motion.h2>
+                </h2>
 
                 <motion.div
                   initial={{ opacity: 0, y: 8 }}
@@ -171,14 +173,15 @@ const ProjectDetailModal = ({ isOpen, onClose, project }) => {
                       View on GitHub
                     </a>
                     {project.live_link && (
-                      <a
+                      <NudgeOnHover
+                        as={motion.a}
                         href={project.live_link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-2 px-4 py-2 bg-treasure hover:bg-treasure-400 text-slate-900 text-sm font-semibold rounded-xl transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-treasure/70"
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-treasure hover:bg-treasure-400 text-slate-900 text-sm font-semibold rounded-xl transition-colors duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-treasure/70"
                       >
-                        ↗ Live Demo
-                      </a>
+                        <AnimatedArrow char="↗" distance={3} /> Live Demo
+                      </NudgeOnHover>
                     )}
                   </div>
                 </motion.div>
@@ -187,7 +190,8 @@ const ProjectDetailModal = ({ isOpen, onClose, project }) => {
           </motion.div>
         </motion.div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 };
 

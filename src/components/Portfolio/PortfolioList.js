@@ -5,6 +5,7 @@ import ProjectDetailModal from './ProjectDetailModal';
 import Navbar from '../Navbar';
 import TechTag from '../TechTag';
 import MouseGlow from '../MouseGlow';
+import { EASE_OUT_EXPO, SPRING_SOFT, AnimatedArrow, NudgeOnHover } from '../../animations';
 
 function ProjectCard({ project, onOpen, animDelay = 0 }) {
   const [imgError, setImgError] = useState(false);
@@ -22,21 +23,18 @@ function ProjectCard({ project, onOpen, animDelay = 0 }) {
       role="button"
       tabIndex={0}
       aria-label={`Open details for ${project.title}`}
-      className="bg-slate-800 border border-slate-700 rounded-xl overflow-hidden cursor-pointer flex flex-col group hover:border-treasure/40 hover:shadow-[0_0_0_1px_rgba(245,158,11,0.12),0_8px_32px_rgba(0,0,0,0.4)] transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-treasure/70"
-      initial={{ opacity: 0, y: 24 }}
+      className="bg-slate-800 border border-slate-700 rounded-xl overflow-hidden cursor-pointer flex flex-col group hover:border-treasure/40 hover:shadow-[0_0_0_1px_rgba(245,158,11,0.12),0_8px_32px_rgba(0,0,0,0.4)] transition-[border-color,box-shadow] duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-treasure/70"
+      initial={{ opacity: 0, y: 22 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5, ease: 'easeOut', delay: animDelay * 0.08 }}
-      whileHover={reduce ? undefined : { y: -6 }}
+      viewport={{ once: true, margin: '-60px' }}
+      transition={{ duration: 0.55, ease: EASE_OUT_EXPO, delay: animDelay * 0.06 }}
+      whileHover={reduce ? undefined : { y: -6, transition: SPRING_SOFT }}
       onClick={onOpen}
       onKeyDown={handleKey}
     >
-      {/* Image wrapper — relative so the WANTED watermark can sit outside layoutId */}
+      {/* Image wrapper */}
       <div className="relative h-44 flex-shrink-0">
-        <motion.div
-          className="absolute inset-0 bg-slate-700 overflow-hidden"
-          layoutId={`project-img-${project.id}`}
-        >
+        <div className="absolute inset-0 bg-slate-700 overflow-hidden">
           {!imgError ? (
             <img
               src={project.image}
@@ -51,7 +49,7 @@ function ProjectCard({ project, onOpen, animDelay = 0 }) {
               <span className="text-slate-600 text-5xl font-black" aria-hidden="true">{project.title.charAt(0)}</span>
             </div>
           )}
-        </motion.div>
+        </div>
 
         {/* Wanted poster watermark — for those who know */}
         <div className="absolute bottom-2 right-3 text-treasure font-mono text-[8px] tracking-[0.55em] font-black uppercase opacity-0 group-hover:opacity-[0.16] transition-opacity duration-500 pointer-events-none select-none">
@@ -60,12 +58,9 @@ function ProjectCard({ project, onOpen, animDelay = 0 }) {
       </div>
 
       <div className="p-5 flex flex-col flex-1">
-        <motion.h3
-          className="font-display text-base font-semibold text-white mb-2"
-          layoutId={`project-title-${project.id}`}
-        >
+        <h3 className="font-display text-base font-semibold text-white mb-2">
           {project.title}
-        </motion.h3>
+        </h3>
         <p className="text-sm text-slate-400 flex-1 mb-3 line-clamp-3 leading-relaxed">
           {project.description}
         </p>
@@ -88,15 +83,16 @@ function ProjectCard({ project, onOpen, animDelay = 0 }) {
             GitHub
           </a>
           {project.live_link && (
-            <a
+            <NudgeOnHover
+              as={motion.a}
               href={project.live_link}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sm text-treasure hover:text-treasure-400 font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-treasure/70 rounded"
+              className="inline-flex items-center gap-1 text-sm text-treasure hover:text-treasure-400 font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-treasure/70 rounded"
               onKeyDown={(e) => e.stopPropagation()}
             >
-              ↗ Live Demo
-            </a>
+              <AnimatedArrow char="↗" distance={3} /> Live Demo
+            </NudgeOnHover>
           )}
         </div>
       </div>
@@ -188,17 +184,14 @@ function PortfolioList() {
               tabIndex={0}
               aria-label={`Open details for ${featured.title}`}
               className="bg-slate-800 border border-slate-700 rounded-2xl overflow-hidden cursor-pointer group hover:border-treasure/40 transition-colors duration-300 flex flex-col md:flex-row focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-treasure/70"
-              initial={{ opacity: 0, y: 24 }}
+              initial={{ opacity: 0, y: 22 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              whileHover={reduce ? undefined : { y: -4 }}
+              transition={{ duration: 0.55, ease: EASE_OUT_EXPO }}
+              whileHover={reduce ? undefined : { y: -4, transition: SPRING_SOFT }}
               onClick={() => setSelectedProject(featured)}
               onKeyDown={handleFeaturedKey}
             >
-              <motion.div
-                className="md:w-5/12 h-56 md:h-auto bg-slate-700 overflow-hidden flex-shrink-0"
-                layoutId={`project-img-${featured.id}`}
-              >
+              <div className="md:w-5/12 h-56 md:h-auto bg-slate-700 overflow-hidden flex-shrink-0">
                 {!featuredImgError ? (
                   <img
                     src={featured.image}
@@ -213,14 +206,11 @@ function PortfolioList() {
                     <span className="text-slate-600 text-7xl font-black" aria-hidden="true">{featured.title.charAt(0)}</span>
                   </div>
                 )}
-              </motion.div>
+              </div>
               <div className="p-8 flex flex-col justify-center md:w-7/12">
-                <motion.h2
-                  className="font-display text-2xl font-bold text-white mb-3"
-                  layoutId={`project-title-${featured.id}`}
-                >
+                <h2 className="font-display text-2xl font-bold text-white mb-3">
                   {featured.title}
-                </motion.h2>
+                </h2>
                 <p className="text-slate-400 leading-relaxed mb-5">{featured.description}</p>
                 <div className="flex flex-wrap gap-2 mb-6">
                   {featured.technologies.map(t => <TechTag key={t} tech={t} />)}
@@ -239,15 +229,16 @@ function PortfolioList() {
                     GitHub
                   </a>
                   {featured.live_link && (
-                    <a
+                    <NudgeOnHover
+                      as={motion.a}
                       href={featured.live_link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-sm font-medium text-treasure hover:text-treasure-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-treasure/70 rounded"
+                      className="inline-flex items-center gap-1 text-sm font-medium text-treasure hover:text-treasure-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-treasure/70 rounded"
                       onKeyDown={(e) => e.stopPropagation()}
                     >
-                      ↗ Live Demo
-                    </a>
+                      <AnimatedArrow char="↗" distance={3} /> Live Demo
+                    </NudgeOnHover>
                   )}
                 </div>
               </div>
