@@ -2,18 +2,19 @@ import React, { useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import Navbar from '../Navbar';
 import MouseGlow from '../MouseGlow';
+import { EASE_OUT_EXPO, SPRING_SNAPPY, AnimatedArrow } from '../../animations';
 
 const HEROTOFU_ENDPOINT =
   'https://public.herotofu.com/v1/7bf7df50-6d53-11ef-95a6-6f38c376f913';
 
 const formStagger = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.08, delayChildren: 0.15 } },
+  visible: { transition: { staggerChildren: 0.06, delayChildren: 0.1 } },
 };
 
 const fieldSlide = {
-  hidden: { opacity: 0, x: -20 },
-  visible: { opacity: 1, x: 0, transition: { duration: 0.45, ease: 'easeOut' } },
+  hidden: { opacity: 0, y: 12 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: EASE_OUT_EXPO } },
 };
 
 const inputClass =
@@ -86,8 +87,9 @@ function ContactForm() {
               <motion.div
                 role="status"
                 aria-live="polite"
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
+                initial={reduce ? { opacity: 0 } : { opacity: 0, y: 12, scale: 0.96 }}
+                animate={reduce ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1 }}
+                transition={reduce ? undefined : { duration: 0.5, ease: EASE_OUT_EXPO }}
                 className="text-center py-6"
               >
                 <div className="w-12 h-12 rounded-full bg-treasure/20 text-treasure mx-auto mb-4 flex items-center justify-center" aria-hidden="true">
@@ -186,12 +188,29 @@ function ContactForm() {
                     <motion.button
                       type="submit"
                       disabled={status === 'submitting'}
-                      className="w-full py-3 px-6 bg-treasure hover:bg-treasure-400 disabled:opacity-60 disabled:cursor-not-allowed text-slate-900 font-bold rounded-lg transition-colors duration-200 text-sm shadow-treasure-glow cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-treasure/70"
-                      whileHover={reduce || status === 'submitting' ? undefined : { scale: 1.02 }}
+                      className="w-full inline-flex items-center justify-center gap-2 py-3 px-6 bg-treasure hover:bg-treasure-400 disabled:opacity-60 disabled:cursor-not-allowed text-slate-900 font-bold rounded-lg transition-colors duration-200 text-sm shadow-treasure-glow cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-treasure/70"
+                      initial="rest"
+                      animate="rest"
+                      whileHover={reduce || status === 'submitting' ? undefined : 'nudge'}
+                      whileFocus={reduce || status === 'submitting' ? undefined : 'nudge'}
                       whileTap={reduce || status === 'submitting' ? undefined : { scale: 0.97 }}
-                      transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+                      transition={SPRING_SNAPPY}
                     >
-                      {status === 'submitting' ? 'Sending…' : 'Send Message →'}
+                      {status === 'submitting' ? (
+                        <>
+                          <motion.span
+                            aria-hidden="true"
+                            className="inline-block w-3.5 h-3.5 border-2 border-slate-900/40 border-t-slate-900 rounded-full"
+                            animate={reduce ? undefined : { rotate: 360 }}
+                            transition={reduce ? undefined : { repeat: Infinity, ease: 'linear', duration: 0.8 }}
+                          />
+                          Sending…
+                        </>
+                      ) : (
+                        <>
+                          Send Message <AnimatedArrow distance={5} />
+                        </>
+                      )}
                     </motion.button>
                   </motion.div>
 
